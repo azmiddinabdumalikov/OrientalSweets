@@ -1,0 +1,35 @@
+﻿@namespace OrientalSweets.Pages
+@using MudBlazor
+@inject NavigationManager Navigation
+@inject IDialogService DialogService
+@using System.Globalization
+
+<MudAppBar Color="Color.Primary" Fixed="true">
+    <MudText Typo="Typo.body1" Class="date-time-text">
+        @CurrentDate Tashkent
+    </MudText>
+
+    <MudSpacer />
+
+    <MudIconButton Icon="@Icons.Custom.Brands.Telegram" Color="Color.Dark" OnClick="@OpenTelegram" />
+</MudAppBar>
+
+@code {
+    private string CurrentDate { get; set; } = DateTime.Now.ToString("dddd, dd.MM.yyyy", new CultureInfo("en-US"));
+
+    protected override void OnInitialized()
+    {
+        var timer = new System.Timers.Timer(60000); 
+        timer.Elapsed += (sender, args) =>
+        {
+            CurrentDate = DateTime.Now.ToString("dddd, dd.MM.yyyy", new CultureInfo("en-US"));
+            InvokeAsync(StateHasChanged);
+        };
+        timer.Start();
+    }
+
+    private void OpenTelegram()
+    {
+        Navigation.NavigateTo("https://t.me/azemet", forceLoad: true);
+    }
+}
